@@ -33,21 +33,19 @@ yesterday = (datetime.datetime.today() + datetime.timedelta(days=-1)).strftime("
 
 if PARSER_ARGS.DAYS:
     DAYS = PARSER_ARGS.DAYS.split(',')
+    START = min(DAYS)
+    END = max(DAYS)
+elif PARSER_ARGS.START and PARSER_ARGS.END:
+    START = PARSER_ARGS.START
+    END = PARSER_ARGS.END
+elif PARSER_ARGS.START:
+    START = PARSER_ARGS.START
+    END = yesterday
+    DAYS = get_DAYS(START, END)
 else:
     DAYS = [yesterday]
-
-if PARSER_ARGS.START:
-    START = PARSER_ARGS.START
-else:
     START = yesterday
-
-if PARSER_ARGS.END:
-    END = PARSER_ARGS.START
-else:
     END = yesterday
-
-if START < min(DAYS):
-    DAYS = get_DAYS(START, END)
 
 if PARSER_ARGS.RPT_TYPES:
     RPT_TYPES = PARSER_ARGS.RPT_TYPES.split(',')
