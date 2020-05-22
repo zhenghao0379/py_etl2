@@ -1,0 +1,30 @@
+nodes:
+ - name: JobA
+   type: command
+   config:
+     command: bash ./write_to_props.sh
+
+ - name: JobB
+   type: command
+   dependsOn:
+     - JobA
+   config:
+     command: echo “This is JobB.”
+   condition: ${JobA:param1} == 1
+
+ - name: JobC
+   type: command
+   dependsOn:
+     - JobA
+   config:
+     command: echo “This is JobC.”
+   condition: ${JobA:param1} == 2
+
+ - name: JobD
+   type: command
+   dependsOn:
+     - JobB
+     - JobC
+   config:
+     command: pwd
+   condition: one_success

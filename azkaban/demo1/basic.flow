@@ -1,0 +1,60 @@
+---
+config:
+  ws: cd /data/demo/
+  ws2: cd /data/demo/ && 
+  ws3: null
+
+nodes:
+  - name: root
+    type: command
+    config:
+      command: echo start root at && date
+
+  - name: test1
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: echo "flow parameters:${S1}"
+
+  - name: test2
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: echo "global parameters:${ws}"
+  
+  - name: python1
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: python3 /data/demo/test.py ${ws3}
+
+  - name: python1
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: python3 /data/demo/test.py
+  
+  - name: python2
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: cd /data/demo/ && python3 test.py
+
+  - name: python3
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: ${ws} && python3 test.py
+
+  - name: python4
+    type: command
+    dependsOn: 
+      - root
+    config:
+      command: ${ws2} python3 test.py

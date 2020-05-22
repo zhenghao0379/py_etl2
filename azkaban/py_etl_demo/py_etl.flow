@@ -1,0 +1,46 @@
+---
+config:
+  ws: cd /data/py_etl/
+  ws1: cd /data/py_etl/ &&
+  ws2: cd /data/py_etl/ && python3
+
+nodes:
+  - name: py_etl
+    type: command
+    config:
+      command: echo 'py_etl demo'
+
+  - name: py_etl_demo
+    type: command
+    dependsOn:
+      - py_etl
+    config:
+      command: python3 /data/py_etl/demo/code/test2.py
+
+  - name: py_etl_demo1
+    type: command
+    dependsOn:
+      - py_etl
+    config:
+      command: cd /data/py_etl/ && python3 demo/code/test2.py
+
+  - name: py_etl_demo_ws
+    type: command
+    dependsOn:
+      - py_etl
+    config:
+      command: ${ws} && python3 demo/code/test2.py
+
+  - name: py_etl_demo_ws1
+    type: command
+    dependsOn:
+      - py_etl
+    config:
+      command: ${ws1} python3 demo/code/test2.py
+
+  - name: py_etl_demo_ws2
+    type: command
+    dependsOn:
+      - py_etl
+    config:
+      command: ${ws2} demo/code/test2.py

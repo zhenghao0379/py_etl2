@@ -1,0 +1,2 @@
+azkaban-flow-version: 2.0
+${ws} = "cd \data\py_etl && python3"
