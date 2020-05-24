@@ -7,9 +7,10 @@ config:
   DAYS: ${D}
   START: ${S}
   END: ${E}
-  RPT_TPYE: ${T}
+  RPT_TPYES: ${T}
   MAIL: ${M}
-  commend.1: bash ./pass_parameters.sh DAYS START END RPT_TYPE MAIL # 处理整合接收参数
+  commend.1: bash ./pass_parameters.sh S{DAYS} ${START} ${END} ${RPT_TYPES} ${MAIL} # 处理整合接收参数
+  commend.2: bash ./pass_test.sh S{DAYS} ${START} ${END} ${RPT_TYPES} ${MAIL}
   # command: cd /data/py_etl2 # 进入工作目录
   command.2: cd /data/py_etl2 && source ./venv/Scripts/activate # 启动虚拟环境
 
@@ -25,6 +26,18 @@ nodes:
       - root
     config:
       command.1: echo ${config:py_flow_val}
+      command.2: echo ${config:py_val}
+
+  - name: test
+    type: command
+    dependsOn:
+      - root
+    config:
+      command.1: echo ${DAYS}
+      command.2: echo ${START}
+      command.3: echo ${END}
+      command.4: echo ${RPT_TYPES}
+      command.5: echo ${MAIL}
 
   - name: test1
     type: command
