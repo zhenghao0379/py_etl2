@@ -1,105 +1,63 @@
 ---
 config:
-  ws: cd /data/demo/
-  ws2: cd /data/demo/ && 
-  ws3: null
-  S1:
-  S2: null
-  S3: ''
-  DAYS: ''
-  START: ''
-  END: ''
-  RPT_TPYE: ''
-  commend: sh ./pass_parameters.sh DAYS START END RPT_TYPE # 处理整合接收参数
-  commend: cd /data/py_etl2 # 进入工作目录
-  commend: source activate # 启动虚拟环境
+  ws: cd /data/py_etl2/
+  ws2: cd /data/py_etl2/ && source v
+  ws3: cd /data/py_etl2/ && source ./venv/Scripts/activate && python3
+  cwd: /data/py_etl2/
+  DAYS: ${D}
+  START: ${S}
+  END: ${E}
+  RPT_TPYE: ${T}
+  MAIL: ${M}
+  commend.1: bash ./pass_parameters.sh DAYS START END RPT_TYPE MAIL # 处理整合接收参数
+  # command: cd /data/py_etl2 # 进入工作目录
+  command.2: cd /data/py_etl2 && source ./venv/Scripts/activate # 启动虚拟环境
 
 nodes:
   - name: root
     type: command
     config:
-      command: echo start root at && date
-  
-  - name: S
+      command: pwd
+
+  - name: test
     type: command
     dependsOn:
       - root
     config:
-      command: echo 
+      command.1: echo ${config:py_flow_val}
 
-  - name: S1
+  - name: test1
     type: command
-    dependsOn: 
-      - S
+    dependsOn:
+      - root
     config:
-      command: echo "flow parameters:S1-${S1}"
+      command.1: cd /data/demo
+      command.2: python3 test.py
 
-  - name: S2
+  - name: python
     type: command
-    dependsOn: 
-      - S
+    dependsOn:
+      - root
     config:
-      command: echo "flow parameters:S2-${S2}"
+      command: python3 /data/demo/test.py
 
-  - name: S3
-    type: command
-    dependsOn: 
-      - S
-    config:
-      command: echo "flow parameters:S3-${S3}"
-
-  - name: test2
-    type: command
-    dependsOn: 
-      - S
-    config:
-      command: echo "global parameters:ws-${ws}"
-  
   - name: python1
     type: command
-    dependsOn: 
+    dependsOn:
       - root
     config:
-      command: python3 /data/demo/test.py
+      command: ${ws2} python3 demo/code/test2.py
 
-  - name: python1-1
-    type: command
-    dependsOn: 
-      - root
-    config:
-      command: python3 /data/demo/test.py
-  
   - name: python2
     type: command
-    dependsOn: 
+    dependsOn:
       - root
     config:
-      command: cd /data/demo/ && python3 test.py
+      command: python3 demo/code/test2.py
 
   - name: python3
     type: command
-    dependsOn: 
-      - root
-    config:
-      command: ${ws} && python3 test.py
-
-  - name: python4
-    type: command
-    dependsOn: 
-      - root
-    config:
-      command: ${ws2} python3 test.py
-
-  - name: py_etl
-    type: command
-    dependsOn: 
-      - root
-    config:
-      command: 
-
-  - name: py_etl_demo1
-    type: command
     dependsOn:
-      - py_etl
+      - root
     config:
-      command: cd /data/py_etl/demo/code/ && python3 test1.py
+      command: ${ws3} demo/code/test2.py
